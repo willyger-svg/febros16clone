@@ -1,91 +1,100 @@
+"use client";
+
 import React, { useState, useEffect } from 'react';
-import { Navbar, PageId } from './components/Navbar';
-import { HomePage } from './pages/HomePage';
-import { DiscoverPage } from './pages/DiscoverPage';
-import { KnowledgePage } from './pages/KnowledgePage';
-import { LearnPage } from './pages/LearnPage';
-import { ResearchPage } from './pages/ResearchPage';
-import { ResourcesPage } from './pages/ResourcesPage';
-import { OpportunitiesPage } from './pages/OpportunitiesPage';
-import { CampaignsPage } from './pages/CampaignsPage';
-import { Footer } from './components/Footer';
-import { SearchModal } from './components/SearchModal';
-import { AuthModal } from './components/AuthModal';
-import { DetailModal } from './components/DetailModal';
-import { StatItem, FeatureCardItem, CategoryItem, SearchResult } from './types';
-import { HERO_STATS, FEATURE_CARDS, CATEGORIES } from './data/mockData';
-import { apiService } from './services/api';
+import Navbar from '../components/Navbar';
+import Footer from '../components/Footer';
+import HomePage from '../app/page';
+import DiscoverPage from '../app/discover/page';
+import KnowledgePage from '../app/knowledge/page';
+import LearnPage from '../app/learn/page';
+import ResearchPage from '../app/research/page';
+import ResourcesPage from '../app/resources/page';
+import OpportunitiesPage from '../app/opportunities/page';
+import CampaignsPage from '../app/campaigns/page';
+import SearchModal from '../components/SearchModal';
+import AuthModal from '../components/AuthModal';
+
+export type AppRoute =
+  | '/'
+  | '/discover'
+  | '/knowledge'
+  | '/learn'
+  | '/research'
+  | '/resources'
+  | '/opportunities'
+  | '/campaigns';
 
 export default function App() {
-  // Sync page state with URL hash (e.g. #discover, #knowledge, #research)
-  const getInitialPage = (): PageId => {
-    if (typeof window !== 'undefined' && window.location.hash) {
-      const hash = window.location.hash.replace('#', '') as PageId;
-      const validPages: PageId[] = [
-        'home',
-        'discover',
-        'knowledge',
-        'learn',
-        'research',
-        'resources',
-        'opportunities',
-        'campaigns',
+  const getInitialRoute = (): AppRoute => {
+    if (typeof window !== 'undefined') {
+      const path = window.location.pathname as AppRoute;
+      const hash = window.location.hash.replace('#', '');
+      const validRoutes: AppRoute[] = [
+        '/',
+        '/discover',
+        '/knowledge',
+        '/learn',
+        '/research',
+        '/resources',
+        '/opportunities',
+        '/campaigns',
       ];
-      if (validPages.includes(hash)) {
-        return hash;
+      if (validRoutes.includes(path)) return path;
+      if (hash && validRoutes.includes(`/${hash}` as AppRoute)) {
+        return `/${hash}` as AppRoute;
       }
     }
-    return 'home';
+    return '/';
   };
 
-  const [currentPage, setCurrentPage] = useState<PageId>(getInitialPage);
-  const [stats, setStats] = useState<StatItem[]>(HERO_STATS);
-  const [categories, setCategories] = useState<CategoryItem[]>(CATEGORIES);
+  const [currentRoute, setCurrentRoute] = useState<AppRoute>(getInitialRoute);
   const [searchModalOpen, setSearchModalOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState<'signin' | 'signup'>('signin');
-  const [selectedFeature, setSelectedFeature] = useState<FeatureCardItem | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<CategoryItem | null>(null);
-  const [selectedSearchResult, setSelectedSearchResult] = useState<SearchResult | null>(null);
 
-  // Synchronize on browser Back / Forward history buttons
   useEffect(() => {
-    const handleHashChange = () => {
-      const page = getInitialPage();
-      setCurrentPage(page);
+    const handlePopState = () => {
+      setCurrentRoute(getInitialRoute());
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('hashchange', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('hashchange', handlePopState);
+    };
   }, []);
 
-  // Fetch dynamic stats and categories on mount
+  // Intercept Next.js Link clicks inside the client environment to provide SPA routing
   useEffect(() => {
-    let isCancelled = false;
-
-    const loadData = async () => {
-      try {
-        const [loadedStats, loadedCategories] = await Promise.all([
-          apiService.getHeroStats(),
-          apiService.getCategories(),
-        ]);
-        if (!isCancelled) {
-          if (loadedStats && loadedStats.length > 0) setStats(loadedStats);
-          if (loadedCategories && loadedCategories.length > 0) setCategories(loadedCategories);
+    const handleClick = (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest('a');
+      if (target && target.getAttribute('href')?.startsWith('/')) {
+        const href = target.getAttribute('href') as AppRoute;
+        const validRoutes: AppRoute[] = [
+          '/',
+          '/discover',
+          '/knowledge',
+          '/learn',
+          '/research',
+          '/resources',
+          '/opportunities',
+          '/campaigns',
+        ];
+        const routeBase = href.split('#')[0].split('?')[0] as AppRoute;
+        if (validRoutes.includes(routeBase)) {
+          e.preventDefault();
+          setCurrentRoute(routeBase);
+          window.history.pushState({}, '', href);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
-      } catch {
-        // Fallback maintained
       }
     };
-
-    loadData();
-    return () => {
-      isCancelled = true;
-    };
+    document.addEventListener('click', handleClick);
+    return () => document.removeEventListener('click', handleClick);
   }, []);
 
-  // Global keyboard shortcut for Search (⌘K / Ctrl+K)
+  // Global search shortcut ⌘K / Ctrl+K
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
@@ -97,141 +106,43 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const navigateToPage = (page: PageId) => {
-    setCurrentPage(page);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-    window.location.hash = page === 'home' ? '' : page;
-  };
-
-  const handleHeroSearch = (query: string) => {
-    setSearchQuery(query);
-    setSearchModalOpen(true);
-  };
-
-  const handleOpenAuth = (mode: 'signin' | 'signup') => {
-    setAuthMode(mode);
-    setAuthModalOpen(true);
-  };
-
-  const handleSelectFeature = (feature: FeatureCardItem) => {
-    // When clicking a feature card, navigate directly to that dedicated page!
-    const pageMap: Record<string, PageId> = {
-      discover: 'discover',
-      learn: 'learn',
-      research: 'research',
-      resources: 'resources',
-      opportunities: 'opportunities',
-      campaigns: 'campaigns',
-    };
-    if (pageMap[feature.id]) {
-      navigateToPage(pageMap[feature.id]);
-    } else {
-      setSelectedFeature(feature);
-    }
-  };
-
-  const handleOpenCampaign = (campaignId: string) => {
-    navigateToPage('campaigns');
-  };
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-blue-600 selection:text-white">
-      {/* Primary Navigation Bar */}
+      {/* Next.js App Router Root Navbar */}
       <Navbar
         onOpenSearch={() => setSearchModalOpen(true)}
-        onOpenAuth={handleOpenAuth}
-        currentPage={currentPage}
-        onNavigatePage={navigateToPage}
+        onOpenAuth={(mode) => {
+          setAuthMode(mode);
+          setAuthModalOpen(true);
+        }}
+        activePath={currentRoute}
       />
 
-      {/* Main Content: Dedicated Page Routing */}
+      {/* Main Content Router for Next.js App Router Pages */}
       <main className="flex-1">
-        {currentPage === 'home' && (
-          <HomePage
-            stats={stats}
-            features={FEATURE_CARDS}
-            categories={categories}
-            onSearch={handleHeroSearch}
-            onOpenSearchModal={() => setSearchModalOpen(true)}
-            onSelectFeature={handleSelectFeature}
-            onSelectCategory={(category) => setSelectedCategory(category)}
-            onOpenCampaign={handleOpenCampaign}
-          />
-        )}
-
-        {currentPage === 'discover' && (
-          <DiscoverPage
-            onSelectItem={(item) => setSelectedSearchResult(item)}
-            onOpenSearch={() => setSearchModalOpen(true)}
-          />
-        )}
-
-        {currentPage === 'knowledge' && (
-          <KnowledgePage
-            onSelectItem={(item) => setSelectedSearchResult(item)}
-            onOpenSearch={() => setSearchModalOpen(true)}
-          />
-        )}
-
-        {currentPage === 'learn' && (
-          <LearnPage />
-        )}
-
-        {currentPage === 'research' && (
-          <ResearchPage />
-        )}
-
-        {currentPage === 'resources' && (
-          <ResourcesPage />
-        )}
-
-        {currentPage === 'opportunities' && (
-          <OpportunitiesPage />
-        )}
-
-        {currentPage === 'campaigns' && (
-          <CampaignsPage />
-        )}
+        {currentRoute === '/' && <HomePage />}
+        {currentRoute === '/discover' && <DiscoverPage />}
+        {currentRoute === '/knowledge' && <KnowledgePage />}
+        {currentRoute === '/learn' && <LearnPage />}
+        {currentRoute === '/research' && <ResearchPage />}
+        {currentRoute === '/resources' && <ResourcesPage />}
+        {currentRoute === '/opportunities' && <OpportunitiesPage />}
+        {currentRoute === '/campaigns' && <CampaignsPage />}
       </main>
 
-      {/* Multi-Column Footer with Page Navigation */}
-      <Footer
-        onNavigatePage={navigateToPage}
-        onOpenSearch={() => setSearchModalOpen(true)}
-      />
+      {/* Next.js App Router Root Footer */}
+      <Footer />
 
-      {/* Interactive Live Search Modal */}
+      {/* Global Interactive Modals */}
       <SearchModal
         isOpen={searchModalOpen}
         onClose={() => setSearchModalOpen(false)}
-        initialQuery={searchQuery}
-        onSelectResult={(result) => setSelectedSearchResult(result)}
       />
 
-      {/* Authentication Modal */}
       <AuthModal
         isOpen={authModalOpen}
         onClose={() => setAuthModalOpen(false)}
         initialMode={authMode}
-      />
-
-      {/* Structured Item Detail Modal */}
-      <DetailModal
-        isOpen={!!selectedFeature || !!selectedCategory || !!selectedSearchResult}
-        onClose={() => {
-          setSelectedFeature(null);
-          setSelectedCategory(null);
-          setSelectedSearchResult(null);
-        }}
-        feature={selectedFeature}
-        category={selectedCategory}
-        searchResult={selectedSearchResult}
-        onExploreTopic={(topic) => {
-          setSelectedFeature(null);
-          setSelectedCategory(null);
-          setSelectedSearchResult(null);
-          handleHeroSearch(topic);
-        }}
       />
     </div>
   );
