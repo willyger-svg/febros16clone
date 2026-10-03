@@ -1,0 +1,6 @@
+{
+  "name": "FEBROS16 — Knowledge, Research & Discovery",
+  "description": "Discover knowledge, research, educational resources, opportunities and useful information with Febros16.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
