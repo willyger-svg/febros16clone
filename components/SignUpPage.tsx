@@ -16,6 +16,7 @@ import {
   ChevronRight,
   AlertCircle,
 } from 'lucide-react';
+import AppBackground from './AppBackground';
 
 interface SignUpPageProps {
   onNavigateHome: () => void;
@@ -90,17 +91,8 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
 
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950 overflow-x-hidden">
-      {/* Dynamic Background Image: Warm Golden Morning Horizon & Ridges */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2560&q=90"
-          alt="Golden Morning Mountain Ridges"
-          className="w-full h-full object-cover object-center scale-100"
-        />
-        {/* Warm Amber-Navy Frosted Overlay for distinct vibrant personality */}
-        <div className="absolute inset-0 bg-slate-950/45 backdrop-blur-[1px]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/70 via-slate-950/20 to-slate-950/90" />
-      </div>
+      {/* Background Image — Imara na thabiti, inaonekana kwa mbali */}
+      <AppBackground intensity="medium" />
 
       {/* Top Header Bar */}
       <header className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 pt-6">

@@ -13,6 +13,7 @@ import {
   LogOut,
   Lock,
 } from 'lucide-react';
+import AppBackground from '../AppBackground';
 
 export type DashboardTabId =
   | 'dashboard'
@@ -53,16 +54,8 @@ export const DashboardLayout: React.FC<DashboardLayoutProps> = ({
 
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col selection:bg-blue-600 selection:text-white font-sans overflow-x-hidden">
-      {/* Background Ambience */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=90"
-          alt="Mandhari ya Usiku"
-          className="w-full h-full object-cover object-center opacity-25 scale-105"
-        />
-        <div className="absolute inset-0 bg-slate-950/85 backdrop-blur-[2px]" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-slate-950 via-slate-950/90 to-blue-950/30" />
-      </div>
+      {/* Background Ambience (Kwa mbali, imara na thabiti) */}
+      <AppBackground intensity="medium" />
 
       {/* ================= TOP NAVBAR ================= */}
       <header className="relative z-30 w-full border-b border-white/10 backdrop-blur-xl bg-slate-950/70 sticky top-0 px-4 sm:px-8 py-3.5 flex items-center justify-between shadow-xl">

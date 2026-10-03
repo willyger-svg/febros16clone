@@ -13,6 +13,7 @@ import {
   AlertCircle,
   HelpCircle,
 } from 'lucide-react';
+import AppBackground from './AppBackground';
 
 interface LoginPageProps {
   onNavigateHome: () => void;
@@ -70,17 +71,8 @@ export const LoginPage: React.FC<LoginPageProps> = ({
 
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col justify-between selection:bg-blue-600 selection:text-white overflow-x-hidden">
-      {/* Dynamic Background Image: Atmospheric Night Alpine Mist */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=2560&q=90"
-          alt="Starry Alpine Night Background"
-          className="w-full h-full object-cover object-center scale-100"
-        />
-        {/* Deep Slate Glass Overlay with subtle blue ambient light */}
-        <div className="absolute inset-0 bg-slate-950/60 backdrop-blur-[2px]" />
-        <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/90 via-slate-950/40 to-slate-950/80" />
-      </div>
+      {/* Background Image — Imara na thabiti, inaonekana kwa mbali */}
+      <AppBackground intensity="medium" />
 
       {/* Top Bar with Home Navigation */}
       <header className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 pt-6">

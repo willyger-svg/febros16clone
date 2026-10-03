@@ -11,6 +11,7 @@ import {
   HeartHandshake,
   Lock,
 } from 'lucide-react';
+import AppBackground from './AppBackground';
 
 interface AssessmentPageProps {
   onNavigateHome: () => void;
@@ -342,18 +343,8 @@ export const AssessmentPage: React.FC<AssessmentPageProps> = ({
 
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col justify-between selection:bg-blue-600 selection:text-white overflow-x-hidden">
-      {/* 1. Deep Atmospheric Background without harsh box borders */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2560&q=90"
-          alt="Atmospheric Mountain Horizon"
-          className="w-full h-full object-cover object-center scale-105"
-        />
-        {/* Soft, rich cinematic gradient glow */}
-        <div className="absolute inset-0 bg-slate-950/65" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-slate-950/80" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/15 via-transparent to-transparent pointer-events-none" />
-      </div>
+      {/* 1. Deep Atmospheric Background (Imara na thabiti, kwa mbali) */}
+      <AppBackground intensity="medium" />
 
       {/* 2. Top Ultra-Thin Floating Header (No card borders) */}
       <header className="relative z-30 w-full max-w-5xl mx-auto px-6 pt-6">

@@ -7,6 +7,7 @@ import {
   Sparkles,
   ArrowRight,
 } from 'lucide-react';
+import AppBackground from './AppBackground';
 
 interface LandingPageProps {
   onNavigateLogin?: () => void;
@@ -21,18 +22,8 @@ export const LandingPage: React.FC<LandingPageProps> = ({
 }) => {
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col justify-between overflow-x-hidden selection:bg-blue-600 selection:text-white">
-      {/* 1. Background Image — Made distinctly bright and visible with subtle atmospheric gradient */}
-      <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img
-          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2560&q=90"
-          alt="Majestic mountain sunrise"
-          className="w-full h-full object-cover object-center transform scale-100"
-        />
-        {/* Subtle translucent overlay so mountain peaks, sun rays, and colors remain vibrant */}
-        <div className="absolute inset-0 bg-slate-950/25" />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/15 to-slate-950/40" />
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-slate-950/80" />
-      </div>
+      {/* 1. Background Image — Imara na thabiti, inaonekana kwa mbali */}
+      <AppBackground intensity="medium" />
 
       {/* 2. Top Header Floating Glass Bar — Only Logo and Login/Signup Buttons (No tabs) */}
       <header className="relative z-20 w-full max-w-7xl mx-auto px-4 sm:px-8 pt-6">
