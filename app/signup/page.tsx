@@ -1,15 +1,15 @@
 "use client";
 
 import { useRouter } from 'next/navigation';
-import LandingPage from '../components/LandingPage';
+import SignUpPage from '../../components/SignUpPage';
 
-export default function HomePage() {
+export default function SignUpRoute() {
   const router = useRouter();
 
   return (
-    <LandingPage
+    <SignUpPage
+      onNavigateHome={() => router.push('/')}
       onNavigateLogin={() => router.push('/login')}
-      onNavigateSignup={() => router.push('/signup')}
     />
   );
 }

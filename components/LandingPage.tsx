@@ -1,46 +1,22 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import {
   ShieldCheck,
   BookOpen,
   Sparkles,
   ArrowRight,
-  X,
-  Mail,
-  Lock,
-  User,
-  CheckCircle2,
 } from 'lucide-react';
 
-export const LandingPage: React.FC = () => {
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState<'login' | 'signup'>('signup');
-  const [formSubmitted, setFormSubmitted] = useState(false);
+interface LandingPageProps {
+  onNavigateLogin?: () => void;
+  onNavigateSignup?: () => void;
+}
 
-  // Form states
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName] = useState('');
-
-  const openAuth = (mode: 'login' | 'signup') => {
-    setAuthMode(mode);
-    setFormSubmitted(false);
-    setAuthModalOpen(true);
-  };
-
-  const handleFormSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setFormSubmitted(true);
-    setTimeout(() => {
-      setAuthModalOpen(false);
-      setFormSubmitted(false);
-      setEmail('');
-      setPassword('');
-      setName('');
-    }, 1400);
-  };
-
+export const LandingPage: React.FC<LandingPageProps> = ({
+  onNavigateLogin,
+  onNavigateSignup,
+}) => {
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col justify-between overflow-x-hidden selection:bg-blue-600 selection:text-white">
       {/* 1. Background Image — Made distinctly bright and visible with subtle atmospheric gradient */}
@@ -50,7 +26,7 @@ export const LandingPage: React.FC = () => {
           alt="Majestic mountain sunrise"
           className="w-full h-full object-cover object-center transform scale-100"
         />
-        {/* Subtle, translucent overlay so mountain peaks, sun rays, and colors remain vibrant */}
+        {/* Subtle translucent overlay so mountain peaks, sun rays, and colors remain vibrant */}
         <div className="absolute inset-0 bg-slate-950/25" />
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/15 to-slate-950/40" />
         <div className="absolute inset-0 bg-gradient-to-b from-slate-950/40 via-transparent to-slate-950/80" />
@@ -69,18 +45,18 @@ export const LandingPage: React.FC = () => {
             </span>
           </div>
 
-          {/* Auth Buttons Only */}
+          {/* Auth Buttons Only — Navigates to dedicated pages */}
           <div className="flex items-center gap-3 sm:gap-4">
             <button
               type="button"
-              onClick={() => openAuth('login')}
+              onClick={onNavigateLogin}
               className="px-4 py-2 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-100 hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl transition-all shadow-md cursor-pointer backdrop-blur-md"
             >
               Log In
             </button>
             <button
               type="button"
-              onClick={() => openAuth('signup')}
+              onClick={onNavigateSignup}
               className="px-4 py-2 sm:px-6 sm:py-2 text-xs sm:text-sm font-bold text-white bg-blue-600/90 hover:bg-blue-500 border border-blue-400/40 rounded-xl transition-all shadow-lg shadow-blue-600/40 hover:shadow-blue-500/60 cursor-pointer backdrop-blur-md"
             >
               Sign Up
@@ -116,7 +92,7 @@ export const LandingPage: React.FC = () => {
           <div className="relative z-10 mt-8 sm:mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               type="button"
-              onClick={() => openAuth('signup')}
+              onClick={onNavigateSignup}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-8 py-3.5 sm:py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-2xl text-sm sm:text-base border border-blue-400/40 shadow-xl shadow-blue-900/60 hover:shadow-blue-600/50 hover:scale-[1.02] transition-all cursor-pointer backdrop-blur-md"
             >
               <span>Anza Sasa (Sign Up)</span>
@@ -124,7 +100,7 @@ export const LandingPage: React.FC = () => {
             </button>
             <button
               type="button"
-              onClick={() => openAuth('login')}
+              onClick={onNavigateLogin}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 sm:py-4 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-2xl text-sm sm:text-base border border-white/25 hover:border-white/40 backdrop-blur-xl shadow-lg transition-all cursor-pointer"
             >
               <span>Ingia kwenye Akaunti (Log In)</span>
@@ -181,147 +157,6 @@ export const LandingPage: React.FC = () => {
           </div>
         </div>
       </footer>
-
-      {/* 5. Clean Glassmorphic Modal for Log In & Sign Up */}
-      {authModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl transition-opacity animate-in fade-in"
-          onClick={() => setAuthModalOpen(false)}
-        >
-          <div
-            className="relative w-full max-w-md backdrop-blur-2xl bg-slate-950/80 border border-white/20 rounded-3xl p-7 sm:p-8 text-white shadow-2xl shadow-black/80"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* Close Button */}
-            <button
-              type="button"
-              onClick={() => setAuthModalOpen(false)}
-              className="absolute top-5 right-5 p-2 text-slate-300 hover:text-white bg-white/10 hover:bg-white/20 border border-white/15 rounded-full transition-colors cursor-pointer backdrop-blur-md"
-              aria-label="Funga"
-            >
-              <X className="w-4 h-4" />
-            </button>
-
-            {formSubmitted ? (
-              <div className="py-8 text-center space-y-3">
-                <div className="w-14 h-14 bg-emerald-500/20 border border-emerald-400/50 rounded-full flex items-center justify-center mx-auto text-emerald-300 backdrop-blur-md shadow-lg">
-                  <CheckCircle2 className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold">
-                  {authMode === 'login' ? 'Umefanikiwa Kuingia!' : 'Akaunti Imetengenezwa!'}
-                </h3>
-                <p className="text-xs text-slate-300">
-                  Karibu kwenye FEBROS16. Mfumo unakuunganisha sasa hivi...
-                </p>
-              </div>
-            ) : (
-              <div>
-                <div className="mb-6">
-                  <span className="text-xs font-mono uppercase tracking-wider text-blue-300">
-                    FEBROS16 Authentication
-                  </span>
-                  <h3 className="mt-1 text-2xl font-bold text-white drop-shadow">
-                    {authMode === 'login' ? 'Ingia kwenye Akaunti' : 'Fungua Akaunti Mpya'}
-                  </h3>
-                  <p className="mt-1 text-xs text-slate-300">
-                    {authMode === 'login'
-                      ? 'Weka barua pepe na neno la siri ili kuendelea'
-                      : 'Jiunge na jamii ya watafiti na wanafunzi wa FEBROS16'}
-                  </p>
-                </div>
-
-                <form onSubmit={handleFormSubmit} className="space-y-4">
-                  {authMode === 'signup' && (
-                    <div>
-                      <label className="block text-xs font-medium text-slate-200 mb-1.5">
-                        Jina Kamili
-                      </label>
-                      <div className="relative">
-                        <User className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                        <input
-                          type="text"
-                          required
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="Mfano: Juma Rashid"
-                          className="w-full bg-slate-900/60 border border-white/20 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 backdrop-blur-md"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-200 mb-1.5">
-                      Barua Pepe (Email)
-                    </label>
-                    <div className="relative">
-                      <Mail className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                      <input
-                        type="email"
-                        required
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        placeholder="jina@mfano.com"
-                        className="w-full bg-slate-900/60 border border-white/20 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 backdrop-blur-md"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-medium text-slate-200 mb-1.5">
-                      Neno la Siri (Password)
-                    </label>
-                    <div className="relative">
-                      <Lock className="absolute left-3.5 top-3 w-4 h-4 text-slate-400" />
-                      <input
-                        type="password"
-                        required
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="••••••••••••"
-                        className="w-full bg-slate-900/60 border border-white/20 rounded-xl pl-10 pr-4 py-2.5 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-blue-400 backdrop-blur-md"
-                      />
-                    </div>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full mt-4 py-3 px-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-sm shadow-lg shadow-blue-900/50 border border-blue-400/30 transition-all cursor-pointer"
-                  >
-                    {authMode === 'login' ? 'Ingia (Log In)' : 'Kamilisha Usajili (Sign Up)'}
-                  </button>
-                </form>
-
-                <div className="mt-6 pt-4 border-t border-white/10 text-center">
-                  {authMode === 'login' ? (
-                    <p className="text-xs text-slate-300">
-                      Huna akaunti bado?{' '}
-                      <button
-                        type="button"
-                        onClick={() => setAuthMode('signup')}
-                        className="text-blue-300 hover:text-blue-200 font-semibold cursor-pointer underline ml-1"
-                      >
-                        Jisajili Hapa (Sign Up)
-                      </button>
-                    </p>
-                  ) : (
-                    <p className="text-xs text-slate-300">
-                      Tayari unayo akaunti?{' '}
-                      <button
-                        type="button"
-                        onClick={() => setAuthMode('login')}
-                        className="text-blue-300 hover:text-blue-200 font-semibold cursor-pointer underline ml-1"
-                      >
-                        Ingia Hapa (Log In)
-                      </button>
-                    </p>
-                  )}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
     </div>
   );
 };
