@@ -14,6 +14,7 @@ import {
 
 interface AssessmentPageProps {
   onNavigateHome: () => void;
+  onNavigateDashboard?: () => void;
   userEmail?: string;
 }
 
@@ -272,6 +273,7 @@ const QUESTIONS: QuestionItem[] = [
 
 export const AssessmentPage: React.FC<AssessmentPageProps> = ({
   onNavigateHome,
+  onNavigateDashboard,
 }) => {
   const [stage, setStage] = useState<'intro' | 'answering' | 'completed_prompt' | 'results'>('intro');
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -734,7 +736,7 @@ export const AssessmentPage: React.FC<AssessmentPageProps> = ({
             <div className="pt-4 flex flex-col sm:flex-row items-center justify-end gap-4">
               <button
                 type="button"
-                onClick={onNavigateHome}
+                onClick={onNavigateDashboard || onNavigateHome}
                 className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl text-sm shadow-xl shadow-blue-900/50 hover:scale-[1.02] transition-all cursor-pointer"
               >
                 Endelea kwenye Dashibodi ya FEBROS16

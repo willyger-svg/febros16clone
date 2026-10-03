@@ -11,11 +11,13 @@ import {
 interface LandingPageProps {
   onNavigateLogin?: () => void;
   onNavigateSignup?: () => void;
+  onNavigateDashboard?: () => void;
 }
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   onNavigateLogin,
   onNavigateSignup,
+  onNavigateDashboard,
 }) => {
   return (
     <div className="relative min-h-screen w-full bg-slate-950 text-white flex flex-col justify-between overflow-x-hidden selection:bg-blue-600 selection:text-white">
@@ -45,21 +47,31 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             </span>
           </div>
 
-          {/* Auth Buttons Only — Navigates to dedicated pages */}
-          <div className="flex items-center gap-3 sm:gap-4">
+          {/* Auth & Dashboard Navigation */}
+          <div className="flex items-center gap-2.5 sm:gap-3">
+            {onNavigateDashboard && (
+              <button
+                type="button"
+                onClick={onNavigateDashboard}
+                className="px-3.5 py-2 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-blue-300 hover:text-white bg-blue-500/15 hover:bg-blue-500/25 border border-blue-400/30 rounded-xl transition-all shadow-md cursor-pointer backdrop-blur-md flex items-center gap-1.5"
+              >
+                <span>🏠</span>
+                <span className="hidden sm:inline">Dashibodi</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={onNavigateLogin}
               className="px-4 py-2 sm:px-5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-100 hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl transition-all shadow-md cursor-pointer backdrop-blur-md"
             >
-              Log In
+              Ingia
             </button>
             <button
               type="button"
               onClick={onNavigateSignup}
               className="px-4 py-2 sm:px-6 sm:py-2 text-xs sm:text-sm font-bold text-white bg-blue-600/90 hover:bg-blue-500 border border-blue-400/40 rounded-xl transition-all shadow-lg shadow-blue-600/40 hover:shadow-blue-500/60 cursor-pointer backdrop-blur-md"
             >
-              Sign Up
+              Jisajili
             </button>
           </div>
         </div>

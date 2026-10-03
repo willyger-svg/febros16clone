@@ -9,6 +9,7 @@ export default function AssessmentRoute() {
   return (
     <AssessmentPage
       onNavigateHome={() => router.push('/')}
+      onNavigateDashboard={() => router.push('/dashboard')}
     />
   );
 }

@@ -10,6 +10,7 @@ export default function HomePage() {
     <LandingPage
       onNavigateLogin={() => router.push('/login')}
       onNavigateSignup={() => router.push('/signup')}
+      onNavigateDashboard={() => router.push('/dashboard')}
     />
   );
 }
