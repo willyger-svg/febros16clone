@@ -4,9 +4,10 @@ import React, { useState, useEffect } from 'react';
 import LandingPage from '../components/LandingPage';
 import LoginPage from '../components/LoginPage';
 import SignUpPage from '../components/SignUpPage';
+import AssessmentPage from '../components/AssessmentPage';
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'login' | 'signup'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'login' | 'signup' | 'assessment'>('home');
 
   // Handle URL hash or direct path if available
   useEffect(() => {
@@ -18,6 +19,8 @@ export default function App() {
         setCurrentPage('login');
       } else if (path === '/signup' || hash === '#signup') {
         setCurrentPage('signup');
+      } else if (path === '/assessment' || hash === '#assessment') {
+        setCurrentPage('assessment');
       } else {
         setCurrentPage('home');
       }
@@ -32,7 +35,7 @@ export default function App() {
     };
   }, []);
 
-  const navigateTo = (page: 'home' | 'login' | 'signup') => {
+  const navigateTo = (page: 'home' | 'login' | 'signup' | 'assessment') => {
     setCurrentPage(page);
     window.history.pushState({}, '', page === 'home' ? '/' : `/${page}`);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -43,6 +46,7 @@ export default function App() {
       <LoginPage
         onNavigateHome={() => navigateTo('home')}
         onNavigateSignup={() => navigateTo('signup')}
+        onLoginSuccess={() => navigateTo('assessment')}
       />
     );
   }
@@ -52,6 +56,15 @@ export default function App() {
       <SignUpPage
         onNavigateHome={() => navigateTo('home')}
         onNavigateLogin={() => navigateTo('login')}
+        onSignUpSuccess={() => navigateTo('assessment')}
+      />
+    );
+  }
+
+  if (currentPage === 'assessment') {
+    return (
+      <AssessmentPage
+        onNavigateHome={() => navigateTo('home')}
       />
     );
   }

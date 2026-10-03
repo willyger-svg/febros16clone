@@ -10,6 +10,7 @@ export default function SignUpRoute() {
     <SignUpPage
       onNavigateHome={() => router.push('/')}
       onNavigateLogin={() => router.push('/login')}
+      onSignUpSuccess={() => router.push('/assessment')}
     />
   );
 }

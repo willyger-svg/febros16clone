@@ -20,11 +20,13 @@ import {
 interface SignUpPageProps {
   onNavigateHome: () => void;
   onNavigateLogin: () => void;
+  onSignUpSuccess?: () => void;
 }
 
 export const SignUpPage: React.FC<SignUpPageProps> = ({
   onNavigateHome,
   onNavigateLogin,
+  onSignUpSuccess,
 }) => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -146,10 +148,11 @@ export const SignUpPage: React.FC<SignUpPageProps> = ({
             </div>
             <button
               type="button"
-              onClick={onNavigateHome}
-              className="mt-6 w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold rounded-xl text-sm shadow-xl transition-all cursor-pointer"
+              onClick={onSignUpSuccess || onNavigateHome}
+              className="mt-6 w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-slate-950 font-bold rounded-xl text-sm shadow-xl transition-all cursor-pointer flex items-center justify-center gap-2"
             >
-              Fungua Ukurasa Mkuu
+              <span>Endelea Kwenye Tathmini ya Usanidi</span>
+              <ChevronRight className="w-4 h-4" />
             </button>
           </div>
         ) : (
